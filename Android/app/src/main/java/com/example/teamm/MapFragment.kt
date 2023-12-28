@@ -1,5 +1,6 @@
 package com.example.teamm
 
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,10 +56,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         val point = LatLng(37.514655, 126.979974)
         map.addMarker(MarkerOptions().position(point).title("현위치"))
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(point,12f))
+
     }
 
     override fun onStart() {
         super.onStart()
+
         mapView.onStart()
     }
 
@@ -106,3 +110,4 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
     }
 }
+
