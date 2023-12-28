@@ -1,5 +1,4 @@
 # Namuthon_M
---------------
 서버 구축
 - aws ec2를 이용하여 구축하고, mysql을 이용한 RDS 생성
   1. ssh와 pem key를 이용한 서버 접속
