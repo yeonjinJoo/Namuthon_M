@@ -23,32 +23,9 @@ const {emit} = require("nodemon");
   */
  exports.postUsers = async function(req, res){
     /**
-     * Body : name, password, email
+     * Body : name, password, nickname, region
      */
-    const {name, password, email, description_p} = req.body;
-
-    // 빈 값 체크
-    if(!email){
-        return res.send(response(baseResponse.SIGNUP_EMAIL_EMPTY));
-    }
-
-    // 길이 체크
-    if(email.length > 30){
-        return res.send(response(baseResponse.SIGNUP_EMAIL_LENGTH));
-    }
-
-    // 형식 체크 ( by 정규표현식 )
-    if(!regexEmail.test(email)){
-        return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
-    }
-
-    // description이 없으면 null, 있으면 들어온 값 이용
-    const description = description_p || null;
-
-    // description 길이 체크
-    if(description && description.length > 45){
-        return res.send(response(baseResponse.SIGNUP_DESCRIPTION_LENGTH));
-    }
+    const {name, password, nickname, region} = req.body;
 
     // 비밀번호 빈 값 체크
     if(!password){
@@ -73,8 +50,8 @@ const {emit} = require("nodemon");
     const signUpResponse = await userService.createUser(
         name,
         password,
-        email,
-        description
+        nickname,
+        region
     );
 
     return res.send(signUpResponse);
@@ -112,11 +89,11 @@ const {emit} = require("nodemon");
   * body : email, password
   */
  exports.login = async function(req, res){
-    const {email, password} = req.body;
+    const {nickname, password} = req.body;
 
     // email, password 형식적 Validation
 
-    const signInResponse = await userService.postSignIn(email, password);
+    const signInResponse = await userService.postSignIn(nickname, password);
 
     return res.send(signInResponse);
  }

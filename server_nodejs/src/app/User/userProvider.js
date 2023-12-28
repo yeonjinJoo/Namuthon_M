@@ -73,10 +73,18 @@ exports.followingCheck = async function (followingInfoParams){
     return followingCheckResult;
 }
 
-exports.accountCheck = async function(email){
+exports.accountCheck = async function(nickname){
     const connection = await pool.getConnection(async (conn) => conn);
-    const userAccountResult = await userDao.selectUserAccount(connection, email);
+    const userAccountResult = await userDao.selectUserAccount(connection, nickname);
     connection.release();
 
     return userAccountResult;
 };
+
+exports.nicknameCheck = async function(nickname){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const nicknameCheckResult = await userDao.selectUserNickname(connection, nickname);
+    connection.release();
+
+    return nicknameCheckResult;
+}

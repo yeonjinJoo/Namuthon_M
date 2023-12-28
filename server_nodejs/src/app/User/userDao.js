@@ -18,7 +18,7 @@ async function selectUserEmail(connection, email){
 
 // 이름으로 회원 조회
 async function selectUserName(connection, name){
-    const selectUserNameQuery = `SELECT userId, u_email FROM USER WHERE u_name = ?;`;
+    const selectUserNameQuery = `SELECT u_id FROM USER WHERE u_name = ?;`;
     const [nameRows] = await connection.query(selectUserNameQuery, name);
     return nameRows;
 }
@@ -54,7 +54,7 @@ async function selectFollowingExist(connection,followingInfoParams){
 // 유저 생성
 async function insertUserInfo(connection, insertUserInfoParams){
     const insertUsertInfoQuery = `
-                        INSERT INTO USER(u_name, u_pw, u_email, userDescription)
+                        INSERT INTO USER(u_name, u_pw, u_nickname, u_region)
                         VALUES (?, ?, ?, ?);
         `;
     const insertUserInfoRow = await connection.query(
@@ -89,9 +89,9 @@ async function insertFollowingInfo(connection, followingInfoParams){
 // 패스워드 체크
 async function selectUserPassword(connection, selectUserPasswordParams){
     const selectUserPasswordQuery = `
-        SELECT u_email, u_name, u_pw
+        SELECT u_name, u_pw
         FROM USER
-        WHERE u_email = ? AND u_pw = ?;`;
+        WHERE u_nickname = ? AND u_pw = ?;`;
     
     const selectUserPasswordRow = await connection.query(
         selectUserPasswordQuery,
@@ -102,15 +102,15 @@ async function selectUserPassword(connection, selectUserPasswordParams){
 }
 
 // user id값 가져오기
-async function selectUserAccount(connection, email){
+async function selectUserAccount(connection, nickname){
     const selectUserAccountQuery = `
-        SELECT userId
+        SELECT u_id
         FROM USER
-        WHERE u_email = ?;`;
+        WHERE u_nickname = ?;`;
 
     const selectUserAccounRow = await connection.query(
         selectUserAccountQuery,
-        email
+        nickname
     );
     return selectUserAccounRow[0];
 }
@@ -120,7 +120,7 @@ async function updateRefreshToken(connection, updateRefreshTokenParams){
     const updateRefreshTokenQuery = `
         UPDATE USER
         SET u_token = ?
-        WHERE userId = ?;`;
+        WHERE u_id = ?;`;
 
     const updateRefreshTokenRow = await connection.query(
         updateRefreshTokenQuery,
@@ -128,6 +128,12 @@ async function updateRefreshToken(connection, updateRefreshTokenParams){
     );
 
     return updateRefreshTokenRow;
+}
+
+async function selectUserNickname(connection, nickname){
+    const selectUserNameQuery = `SELECT u_id, u_nickname FROM USER WHERE u_nickname = ?;`;
+    const [nicknameRows] = await connection.query(selectUserNameQuery, nickname);
+    return nicknameRows;
 }
 
 module.exports = {
@@ -141,5 +147,6 @@ module.exports = {
     insertFollowingInfo,
     selectUserPassword,
     selectUserAccount,
-    updateRefreshToken
+    updateRefreshToken,
+    selectUserNickname
 }

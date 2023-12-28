@@ -15,15 +15,8 @@ const jwtMake = require("../../../config/jwtUtils");
 // Service: Create, Update, Delete 비즈니스 로직 처리
 // 오류 확인도 하는 듯
 
-exports.createUser = async function(name, password, email, description){
+exports.createUser = async function(name, password, nickname, region){
     try{
-        // 이메일 중복 확인
-        const emailRows = await userProvider.emailCheck(email);
-
-        if(emailRows.length > 0){
-            return errResponse(baseResponse.SIGNUP_REDUNDANT_EMAIL);
-        }
-
         // 이름 중복 확인
         const nameRows = await userProvider.nameCheck(name);
 
@@ -39,7 +32,7 @@ exports.createUser = async function(name, password, email, description){
 
         console.log(hashedPassword);
 
-        const insertUserInfoParams = [name, hashedPassword, email, description];
+        const insertUserInfoParams = [name, hashedPassword, nickname, region];
 
         const connection = await pool.getConnection(async (conn) => conn);
 
@@ -76,31 +69,36 @@ exports.createFollowing = async function(myId, otherId){
     }
 }
 
-exports.postSignIn = async function(email, password){
+exports.postSignIn = async function(nickname, password){
     try{
-        // 이메일 여부 확인
-        const emailRows = await userProvider.emailCheck(email);
-        if(emailRows.length < 1){
+        // 닉네임 여부 확인
+        const nicknameRows = await userProvider.nicknameCheck(nickname);
+        console.log(nicknameRows);
+        if(nicknameRows.length < 1){
             return errResponse(baseResponse.SIGNIN_EMAIL_WRONG);
         }
 
-        const selectEmail = emailRows[0].u_email;
+        const selectNickname = nicknameRows[0].u_nickname;
 
         // 비밀번호 확인
         const hashedPassword = await crypto.createHash("sha512")
             .update(password)
             .digest("hex");
+        
+        console.log({selectNickname, hashedPassword});
 
-        const selectUserPasswordParams = [selectEmail, hashedPassword];
+        const selectUserPasswordParams = [selectNickname, hashedPassword];
         const passwordRows = await userProvider.passwordCheck(selectUserPasswordParams);
+
+        console.log(passwordRows);
 
         if(passwordRows[0].u_pw != hashedPassword){
             return errResponse(baseResponse.SIGNIN_PASSWORD_WRONG);
         }
 
-        const userInfoRows = await userProvider.accountCheck(email);
+        const userInfoRows = await userProvider.accountCheck(nickname);
 
-        let uid = userInfoRows[0].userId;
+        let uid = userInfoRows[0].u_id;
 
         let token = jwtMake.makeToken(uid);
 
@@ -117,7 +115,7 @@ exports.postSignIn = async function(email, password){
 
         connection.release();
 
-        return response(baseResponse.SUCCESS, {'userId' : userInfoRows[0].uid, 'jwt-accessToken' : token, 'jwt-refreshToken' : refreshToken});
+        return response(baseResponse.SUCCESS, {'u_id' : userInfoRows[0].uid, 'jwt-accessToken' : token, 'jwt-refreshToken' : refreshToken});
 
     }catch(err){
         logger.error(`App - postSignIn Service error\n: ${err.message}\n ${JSON.stringify(err)}}`);
