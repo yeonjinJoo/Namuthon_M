@@ -4,9 +4,6 @@
 module.exports = function(app){
     const user = require('./userController');
     const jwtMiddleware = require('../../../config/jwtMiddleware');
-
-    // 0. 테스트 API
-     app.get('/app/test', user.getTest);
      
     // 1. 유저 생성 (회원가입) API
      app.post('/app/users', user.postUsers);
@@ -16,14 +13,5 @@ module.exports = function(app){
 
      // 3. 유저 로그인 API
      app.post('/app/login', user.login);
-
-     // 4. 유저 팔로워 조회 API
-     app.get('/app/followers', user.getFollowers);
-
-     // 5. 유저 팔로잉 조회 API
-     app.get('/app/followings', user.getFollowings);
-
-     // 6. 유저 팔로잉하기 API
-     app.post('/app/followings', user.makeFollowing);
 
 };

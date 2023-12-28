@@ -47,28 +47,6 @@ exports.createUser = async function(name, password, nickname, region){
     }
 }
 
-exports.createFollowing = async function(myId, otherId){
-    try{
-        const followingInfoParams = [myId, otherId];
-
-        // 이미 팔로잉 하는 중인지 확인
-        const followingRows = await userProvider.followingCheck(followingInfoParams);
-        if(followingRows.length > 0){
-            return errResponse(baseResponse.FOLLOWING_ALREADY);
-        }
-
-        const connection = await pool.getConnection(async (conn) => conn);
-
-        const followingResult = await userDao.insertFollowingInfo(connection, followingInfoParams);
-        connection.release();
-        return response(baseResponse.SUCCESS);
-
-    }catch(err){
-        logger.error(`App - createFollowing Service error\n: ${err.message}`);
-        return errResponse(baseResponse.DB_ERROR);
-    }
-}
-
 exports.postSignIn = async function(nickname, password){
     try{
         // 닉네임 여부 확인
@@ -100,6 +78,12 @@ exports.postSignIn = async function(nickname, password){
 
         let uid = userInfoRows[0].u_id;
 
+        // change
+        const regionRows = await userProvider.regionCheck(uid);
+        let region = regionRows[0].u_region;
+
+        const supportList = await userProvider.retrieveSupportList(region);
+
         let token = jwtMake.makeToken(uid);
 
         console.log("token : " + token);
@@ -115,7 +99,8 @@ exports.postSignIn = async function(nickname, password){
 
         connection.release();
 
-        return response(baseResponse.SUCCESS, {'u_id' : userInfoRows[0].uid, 'jwt-accessToken' : token, 'jwt-refreshToken' : refreshToken});
+        return response(baseResponse.SUCCESS, supportList);
+        // return response(baseResponse.SUCCESS, {'u_id' : userInfoRows[0].uid, 'jwt-accessToken' : token, 'jwt-refreshToken' : refreshToken});
 
     }catch(err){
         logger.error(`App - postSignIn Service error\n: ${err.message}\n ${JSON.stringify(err)}}`);

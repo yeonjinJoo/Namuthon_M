@@ -9,13 +9,6 @@ async function selectUser(connection){
     return userRows;
 }
 
-// 이메일로 회원 조회
-async function selectUserEmail(connection, email){
-    const selectUserEmailQuery = `SELECT u_name, u_email FROM USER WHERE u_email = ?;`;
-    const [emailRows] = await connection.query(selectUserEmailQuery, email);
-    return emailRows;
-}
-
 // 이름으로 회원 조회
 async function selectUserName(connection, name){
     const selectUserNameQuery = `SELECT u_id FROM USER WHERE u_name = ?;`;
@@ -23,32 +16,22 @@ async function selectUserName(connection, name){
     return nameRows;
 }
 
-// userId의 팔로워 조회
-async function selectFollowerId(connection, uid){
-    const selectFollowerQuery = `SELECT U.u_name from USER as U
-                                    JOIN FOLLOWER as F
-                                    WHERE F.userId = ? AND U.userId = F.followerId;`;
+// id로 거주지 조회
+async function selectUserRegion(connection, uid){
+    const selectUserRegionQuery = `SELECT u_region FROM USER WHERE u_id = ?;`;
+    const [regionRows] = await connection.query(selectUserRegionQuery, uid);
+    return regionRows;
+}
+
+// 거주지로 지원사업 조회
+async function selectUserSupport(connection, region){
+    const selectUserSupportQuery = `
+        SELECT s_title, s_image, s_period, s_link, s_region, s_recruit
+        FROM SUPPORT
+        WHERE s_region = ? OR s_region = "전국";`;
     
-    const [followerRows] = await connection.query(selectFollowerQuery, uid);
-    return followerRows;
-}
-
-// userId의 팔로잉 조회
-async function selectFollowingId(connection, uid){
-    const selectFollowingQuery = `SELECT U.u_name from USER as U
-                                    JOIN FOLLOWING as F
-                                    WHERE F.userId = ? AND U.userId = F.followingId;`;
-
-    const [followingRows] = await connection.query(selectFollowingQuery, uid);
-    return followingRows;
-}
-
-// 팔로잉 존재하는지 조회
-async function selectFollowingExist(connection,followingInfoParams){
-    const selectFollowingExistQuery = `SELECT userId FROM FOLLOWING WHERE userId = ? AND followingId = ?;`;
-
-    const [followingExistRows] = await connection.query(selectFollowingExistQuery, followingInfoParams);
-    return followingExistRows;
+    const [supportRows] = await connection.query(selectUserSupportQuery, region);
+    return supportRows;
 }
 
 // 유저 생성
@@ -65,31 +48,10 @@ async function insertUserInfo(connection, insertUserInfoParams){
     return insertUserInfoRow;
 }
 
-// 팔로잉 생성
-async function insertFollowingInfo(connection, followingInfoParams){
-    // 팔로잉 Query
-    const insertFollowingInfoQuery = `
-                        INSERT INTO FOLLOWING(userId, followingId)
-                        VALUES (?, ?);`;
-    
-    // other의 팔로워 업데이트 Query
-    const insertFollowerInfoQuery = `
-                        INSERT INTO FOLLOWER(followerId, userId)
-                        VALUES (?, ?);`;
-
-    const insertFollowingInfoRow = await connection.query(insertFollowingInfoQuery, followingInfoParams);
-    const insertFollowerInfoRow = await connection.query(insertFollowerInfoQuery, followingInfoParams);
-
-    return {
-        insertFollowingInfoRow,
-        insertFollowerInfoRow
-    };
-}
-
 // 패스워드 체크
 async function selectUserPassword(connection, selectUserPasswordParams){
     const selectUserPasswordQuery = `
-        SELECT u_name, u_pw
+        SELECT u_pw
         FROM USER
         WHERE u_nickname = ? AND u_pw = ?;`;
     
@@ -138,15 +100,12 @@ async function selectUserNickname(connection, nickname){
 
 module.exports = {
     selectUser,
-    selectUserEmail,
     selectUserName,
-    selectFollowerId,
-    selectFollowingId,
-    selectFollowingExist,
+    selectUserSupport,
     insertUserInfo,
-    insertFollowingInfo,
     selectUserPassword,
     selectUserAccount,
+    selectUserRegion,
     updateRefreshToken,
     selectUserNickname
 }

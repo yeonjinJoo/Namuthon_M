@@ -7,15 +7,6 @@ const {response, errResponse} = require("../../../config/response");
 const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
 
-/**
- * API No. 0
- * API Name : 테스트 API
- * [GET] /app/test
- */
- exports.getTest = async function (req, res) {
-     return res.send(response(baseResponse.SUCCESS))
- };
-
  /**
   * API No. 1
   * API Name : 유저 생성 (회원가입) API
@@ -96,86 +87,4 @@ const {emit} = require("nodemon");
     const signInResponse = await userService.postSignIn(nickname, password);
 
     return res.send(signInResponse);
- }
-
- /**
-  * API NO. 4
-  * API Name : 팔로워 조회 API
-  * [GET] /api/followers
-  */
- exports.getFollowers = async function(req, res){
-    /**
-     * Query String : name
-     */
-    const name = req.query.name;
-
-    if(!name){
-        return res.send(response(baseResponse.USER_NAME_TO_FIND_EMPTY));
-    }
-    else{
-        const userListByName = await userProvider.nameCheck(name);
-        const uid = userListByName[0].userId;
-
-        const followerListById = await userProvider.retrieveFollowerList(uid);
-        return res.send(response(baseResponse.SUCCESS, followerListById));
-    }
- }
-
-  /**
-  * API NO. 5
-  * API Name : 팔로잉 조회 API
-  * [GET] /app/followings
-  */
-  exports.getFollowings = async function(req, res){
-    /**
-     * Query String : name
-     */
-    const name = req.query.name;
-
-    if(!name){
-        return res.send(response(baseResponse.USER_NAME_TO_FIND_EMPTY));
-    }
-    else{
-        const userListByName = await userProvider.nameCheck(name);
-        const uid = userListByName[0].userId;
-
-        const followingListById = await userProvider.retrieveFollowingList(uid);
-        return res.send(response(baseResponse.SUCCESS, followingListById));
-    }
- }
-
- /**
-  * API NO.6
-  * API Name : 유저 팔로잉하기 API
-  * [POST] /app/followings
-  */
- exports.makeFollowing = async function(req, res){
-    /**
-     * Query String : myName, otherName
-     */
-    const myName = req.query.myName;
-    const otherName = req.query.otherName;
-
-    if(!myName || !otherName){
-        return res.send(response(baseResponse.USER_NAME_TO_FIND_EMPTY));
-    }
-    else{
-        const userListByName = await userProvider.nameCheck(myName);
-        const otherListByName = await userProvider.nameCheck(otherName);
-
-        // User doesn't exist
-        if(userListByName.length < 1 || otherListByName.length < 1){
-            return res.send(response(baseResponse.USER_USERID_NOT_EXIST));
-        }
-    
-        const myId = userListByName[0].userId;
-        const otherId = otherListByName[0].userId;
-    
-        const followingResponse = await userService.createFollowing(
-            myId,
-            otherId
-        );
-    
-        return res.send(followingResponse);
-    }
  }
