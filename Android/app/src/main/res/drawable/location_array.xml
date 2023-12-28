@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <string-array android:name="location_array">
+        <item>서울</item>
+        <item>경기</item>
+        <item>대전</item>
+        <item>전북</item>
+        <item>세종</item>
+
+    </string-array>
+</resources>
