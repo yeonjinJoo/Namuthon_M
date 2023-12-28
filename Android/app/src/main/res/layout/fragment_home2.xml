@@ -93,15 +93,14 @@
 
         <ImageButton
             android:id="@+id/home_more_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_recycler_view1"
-            android:src="@drawable/baseline_arrow_forward_ios_24"
+            android:src="@drawable/arrow_forward_ios"
             android:backgroundTint="#00ff0000"
             android:layout_marginTop="40dp"
-            android:paddingStart="4dp"
-            android:paddingVertical="0dp"/>
+            android:layout_marginEnd="20dp" />
 
         <Button
             android:id="@+id/home_more_text"
@@ -112,9 +111,10 @@
             app:layout_constraintEnd_toStartOf="@+id/home_more_btn"
             android:backgroundTint="#00ff0000"
             android:text="전체 지원 사업 보러 가기"
-            android:textColor="@color/black"
-            android:textSize="19sp"
-            android:padding="0dp" />
+            android:textColor="#4E4E4E"
+            android:textSize="14sp"
+            android:layout_marginEnd="5dp"
+            android:paddingEnd="0dp"/>
 
         <TextView
             android:id="@+id/home_title2"

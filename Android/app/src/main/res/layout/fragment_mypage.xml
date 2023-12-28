@@ -8,15 +8,97 @@
 
     <!-- TODO: Update blank fragment layout -->
     <View
+        android:id="@+id/mypage_purple"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="360dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:backgroundTint="#555FB7"
         android:background="#000000"/>
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/mypage_top"
+        android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        android:text="내 정보"
+        android:textColor="@color/white"
+        android:textSize="23sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="20dp"/>
+
+    <TextView
+        android:id="@+id/mypage_hi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="안녕하세요!"
+        android:textSize="23sp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_top"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="140dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="민지님"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@+id/mypage_hi"
+        app:layout_constraintBottom_toBottomOf="@+id/mypage_hi"
+        app:layout_constraintStart_toEndOf="@+id/mypage_hi"
+        android:layout_marginStart="5dp"/>
+    <TextView
+        android:id="@+id/mypage_where"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="거주 지역"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_hi"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/home_region_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="서울"
+        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="@+id/mypage_where"
+        app:layout_constraintBottom_toBottomOf="@+id/mypage_where"
+        app:layout_constraintStart_toEndOf="@+id/mypage_where"
+        android:layout_marginStart="10dp"
+        android:paddingVertical="3.5dp"
+        android:paddingHorizontal="9dp"
+        android:backgroundTint="#EEEFF8"
+        android:background="@drawable/bg_custom_round"
+        android:textColor="#555FB7"/>
+
+    <TextView
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="로그아웃"
+        app:layout_constraintTop_toBottomOf="@+id/mypage_purple"
+        app:layout_constraintStart_toStartOf="@+id/mypage_purple"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_forward_ios_mypage"
+        app:layout_constraintBottom_toBottomOf="@+id/logout"
+        app:layout_constraintTop_toTopOf="@+id/logout"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="#00ff0000" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
