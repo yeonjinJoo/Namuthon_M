@@ -4,23 +4,6 @@ const { logger } = require("../../../config/winston");
 
 const userDao = require("./userDao");
 
-exports.retrieveUserList = async function(email){
-    if(!email){
-        const connection = await pool.getConnection(async(conn) => conn);
-        const userListResult = await userDao.selectUser(connection);
-        connection.release();
-
-        return userListResult;
-    }
-    else{
-        const connection = await pool.getConnection(async(conn) => conn);
-        const userListResult = await userDao.selectUserEmail(connection, email);
-        connection.release();
-
-        return userListResult;
-    }
-};
-
 exports.retrieveSupportList = async function(region){
     const connection = await pool.getConnection(async(conn) => conn);
     const supportListResult = await userDao.selectUserSupport(connection, region);
@@ -29,12 +12,28 @@ exports.retrieveSupportList = async function(region){
     return supportListResult;
 }
 
+exports.retrieveShelterList = async function(region){
+    const connection = await pool.getConnection(async(conn) => conn);
+    const shelterListResult = await userDao.selectUserShelter(connection, region);
+    connection.release();
+
+    return shelterListResult;
+}
+
 exports.nameCheck = async function(name){
     const connection = await pool.getConnection(async (conn) => conn);
     const nameCheckResult = await userDao.selectUserName(connection, name);
     connection.release();
 
     return nameCheckResult;
+}
+
+exports.shelterCheck = async function(){
+    const connection = await pool.getConnection(async (conn) => conn);
+    const shelterCheckResult = await userDao.selectAllShelters(connection);
+    connection.release();
+
+    return shelterCheckResult;
 }
 
 exports.passwordCheck = async function (selectUserPasswordParams){

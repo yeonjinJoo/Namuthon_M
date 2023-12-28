@@ -49,42 +49,33 @@ const {emit} = require("nodemon");
 
  }
 
- /**
-  * API NO. 2
-  * API Name : 유저 조회 API ( + 이메일로 검색 조회 )
-  * [GET] /app/users
-  */
- exports.getUsers = async function (req, res){
-
-    /**
-     * Query String : email
-     */
-    const email = req.query.email;
-
-    if(!email){
-        // 유저 전체 조회
-        const userListResult = await userProvider.retrieveUserList();
-        return res.send(response(baseResponse.SUCCESS, userListResult));
-    }else{
-        // 특정 유저 조회
-        const userListByEmail = await userProvider.retrieveUserList(email);
-        return res.send(response(baseResponse.SUCCESS, userListByEmail));
-    }
- }
-
  //After 로그인 인증 방법 (JWT)
  /**
-  * API NO. 3
-  * API Name : 로그인 API
-  * [POST] /api/login
-  * body : email, password
+  * API NO. 2
+  * API Name : 로그인 API ( + 맞춤 지원사업 Return )
+  * [POST] /app/login
+  * body : nickname, password
   */
  exports.login = async function(req, res){
     const {nickname, password} = req.body;
 
-    // email, password 형식적 Validation
+    // nickname, password 형식적 Validation
 
     const signInResponse = await userService.postSignIn(nickname, password);
 
     return res.send(signInResponse);
+ }
+
+ /**
+  * API NO.3
+  * API Name : 맞춤 쉼터 Return API
+  * [GET] /app/shelters
+  * body : nickname
+  */
+ exports.getShelters = async function(req, res){
+    const {nickname} = req.body;
+
+    const shelterResponse = await userService.getUserShelters(nickname);
+
+    return res.send(shelterResponse);
  }

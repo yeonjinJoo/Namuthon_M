@@ -1,16 +1,8 @@
 // 데이터베이스랑 직접 소통하는 애
 
-// 모든 유저 조회
-async function selectUser(connection){
-    // `` 얘는 백틱이라 불림. Grave. 한글일 때 option + 하거나 영어일땐 그냥 물결표 누르면 됨
-    const selectUserListQuery = `SELECT u_name, u_email FROM USER;`;
-    const [userRows] = await connection.query(selectUserListQuery);
-
-    return userRows;
-}
-
 // 이름으로 회원 조회
 async function selectUserName(connection, name){
+    // `` 얘는 백틱이라 불림. Grave. 한글일 때 option + 하거나 영어일땐 그냥 물결표 누르면 됨
     const selectUserNameQuery = `SELECT u_id FROM USER WHERE u_name = ?;`;
     const [nameRows] = await connection.query(selectUserNameQuery, name);
     return nameRows;
@@ -34,6 +26,17 @@ async function selectUserSupport(connection, region){
     return supportRows;
 }
 
+// 거주지로 쉼터 조회
+async function selectUserShelter(connection, region){
+    const selectUserShelterQuery = `
+        SELECT st_region, st_name, st_addr, st_phonenum
+        FROM SHELTER
+        WHERE st_region = ?;`;
+    
+    const [shelterRows] = await connection.query(selectUserShelterQuery, region);
+    return shelterRows;
+}
+
 // 유저 생성
 async function insertUserInfo(connection, insertUserInfoParams){
     const insertUsertInfoQuery = `
@@ -46,6 +49,21 @@ async function insertUserInfo(connection, insertUserInfoParams){
     );
 
     return insertUserInfoRow;
+}
+
+// 쉼터 생성
+async function insertShelterInfo(connection, insertShelterInfoParams){
+    const insertShelterInfoQuery = `
+                            INSERT INTO SHELTER(st_region, st_name, st_addr, st_phonenum)
+                            VALUES (?,?,?,?);                    
+        `;
+    
+    const insertShelterInfoRow = await connection.query(
+        insertShelterInfoQuery,
+        insertShelterInfoParams
+    );
+
+    return insertShelterInfoRow;
 }
 
 // 패스워드 체크
@@ -98,14 +116,22 @@ async function selectUserNickname(connection, nickname){
     return nicknameRows;
 }
 
+async function selectAllShelters(connection){
+    const getSheltersQuery = `SELECT * FROM SHELTER;`;
+    const [shelterRows] = await connection.query(getSheltersQuery);
+    return shelterRows;
+}
+
 module.exports = {
-    selectUser,
     selectUserName,
     selectUserSupport,
+    selectUserShelter,
     insertUserInfo,
+    insertShelterInfo,
     selectUserPassword,
     selectUserAccount,
     selectUserRegion,
     updateRefreshToken,
-    selectUserNickname
+    selectUserNickname,
+    selectAllShelters
 }
