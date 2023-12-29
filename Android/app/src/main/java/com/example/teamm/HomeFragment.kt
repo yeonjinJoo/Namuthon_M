@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,7 +34,19 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val rootView = inflater.inflate(R.layout.fragment_home2, container, false)
         // Inflate the layout for this fragment
+        val recyclerView = rootView.findViewById<RecyclerView>(R.id.home_recycler_view1)
+        val adapter = Recycler1Adapter()
+        val memberList = listOf(
+            Recycler1(R.drawable.i1, "청년 전세보증금반환보증 보증료 지원", "2023-07-26 ~ 2023-12-31"),
+            Recycler1(R.drawable.i2, "자립준비청년 키트 지원 사업", "2023-10-18 ~ 2024-01-24"),
+            Recycler1(R.drawable.i3, "삼성 희망디딤돌2.0", "2023-11-15 ~ 2024-01-02"),
+            Recycler1(R.drawable.i4, "삼성 희망디딤돌 센터", "2023-05-11 ~ 2023-12-31")
+
+        )
+        recyclerView.adapter = adapter
+        adapter.submitList(memberList)
         return inflater.inflate(R.layout.fragment_home2, container, false)
     }
 
