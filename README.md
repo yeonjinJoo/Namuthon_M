@@ -12,6 +12,8 @@
 - JavaVersion.VERSION_1_8
 
 ## 📌 서버 구축
+- aws ec2를 이용한 서버 구축 & aws RDS 데이터베이스 생성
+
 - ssh와 pem key를 이용한 서버 접속
 - /var/www/nodejs_template/Namuthon_M/server_nodejs ( index.js가 존재하는 위치 )로 이동
 - sudo node index.js를 통해 서버 실행
