@@ -4,9 +4,8 @@ import java.io.Serializable
 
 class User(
     var id: String,
-    var pw: String,
-    var name: String
+    var pw: String
 ): Serializable {
-    constructor(): this("","","")
+    constructor(): this("","")
 
 }

@@ -52,7 +52,6 @@ class DBHelper(
                     val user = User()
                     user.id = cursor.getString(cursor.getColumnIndex(COL_ID))
                     user.pw = cursor.getString(cursor.getColumnIndex(COL_PW))
-                    user.name = cursor.getString(cursor.getColumnIndex(COL_NAME))
 
                     users.add(user)
                 }while(cursor.moveToNext())
@@ -95,7 +94,6 @@ class DBHelper(
         val values = ContentValues()
         values.put(COL_ID, user.id)
         values.put(COL_PW, user.pw)
-        values.put(COL_NAME, user.name)
 
         db.insert(TABLE_NAME, null, values)
         db.close()
@@ -127,7 +125,6 @@ class DBHelper(
         val values = ContentValues()
         values.put(COL_ID, user.id)
         values.put(COL_PW, user.pw)
-        values.put(COL_NAME, user.name)
 
         return db.update(TABLE_NAME, values, "$COL_ID=?", arrayOf(user.id))
     }
